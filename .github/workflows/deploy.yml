@@ -1,0 +1,36 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js (если необходимо)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Build project (если требуется)
+        run: |
+          # Например, если проект требует сборки с использованием npm:
+          # npm install
+          # npm run build
+          
+      - name: Deploy to GitHub Pages
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git remote set-url origin https://github.com/${{ github.repository }}
+          git checkout ghpages
+          git add .
+          git commit -m "Deploy version $GITHUB_REF"
+          git push origin ghpages
+
